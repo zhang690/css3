@@ -1,0 +1,242 @@
+    <!-- built files will be auto injected -->
+
+    <!-- css3 选择器 -->
+    <!-- 
+      类选择器，伪类选择器，属性选择器的权重是 10
+      1.属性选择器
+        E[attr]         选择拥有 attr 属性的元素
+          例如：button[disabled] {color:red}
+        E[attr="value"] 选择拥有 attr 属性，并且值为 value 的元素
+        E[attr^="val"] 选择拥有 attr 属性，并且值以 val 开头的元素
+        E[attr$="val"] 选择拥有 attr 属性，并且值以 val 结尾的元素
+        E[attr*="val"] 选择拥有 attr 属性，并且值里拥有 val 的元素
+      2.结构伪类选择器
+        E:first-child 匹配父元素中的第一个子元素E
+          例如：ul li:first-child {color:red}
+        E:last-child  匹配父元素中的最后一个子元素E
+        E:nth-child(n) 匹配父元素中的第n个子元素E
+          !!!注意：n只认第几个子元素，
+            例如： 父元素下既有p元素，又有span元素，
+                   div span:nth-child(n),
+                  选择的就是第n个子元素span，而不是子元素span的第n个.
+          n可以是数字，
+          n可以是关键词：如 even偶数 odd奇数
+          n可以是公式: 是公式的时候，n是从 0 开始的，第0个和超出部分忽略(n不是索引，是第几个，所以没有0)
+              比如：E:nth-child(n),从第1个 开始 全部选取了(从0开始，但是忽略0)
+                   常用的还有：2n,2n+1,5n,n+5,-n+5,等
+        E:first-of-type 指定类型 E 的第一个
+          这个可以解决 :nth-child(n) 的问题，即可以指定子元素是span类型的元素
+          例如：div span:first-of-type  就是 div的span类型子元素的第一个。
+        E:last-of-type 指定类型 E 的最后一个
+        E:nth-of-type(n) 指定类型 E 的第n个
+      3.伪元素选择器
+        ::before 在元素内部的前面插入内容
+        ::after  在元素内部的后面插入内容
+        ！！！注意：
+            before 和 after 必须有 content 属性
+            before 在内容前面  after 在内容后面
+            before after 会创建一个元素，但是属于行内元素 
+              因为 创建的这个元素在dom里面开不到，所以称为 伪元素
+            伪元素 和 标签一样，权重为 1
+            
+     -->
+
+    <!-- css3 2D转换(transform) -->
+    <!-- 
+      转换 transform 可以实现元素的 位移，旋转，缩放等效果
+      连写方式：transform:translate() rotate() scale();
+      !!!注意：连写时，先后顺序会影响转换效果，如：先旋转 会改变轴线方向
+              连写时，位移放最前面
+        1：位移：translate
+            语法格式：
+              transform:translate(x,y);
+              transform:translateX(n);
+              transform:translateY(n);
+              也可以：transform:translateX(n) translateY(n)
+            重点：1：最大的优点是：不会影响到其他元素
+                  2：能设置百分比，百分比相对于自身的宽高
+                      可以用来盒子居中 以前要计算，现在不用了
+                  3：对行内元素不起作用
+        2：旋转：rotate
+            语法格式：
+              transform:rotate(度数) 
+                单位是deg 比如：rotate(45deg)
+                度数为正时：顺时针，度数为负时：逆时针
+                默认旋转的中心点是 元素的中心点
+            设置旋转的中心点：
+              语法格式：
+              transform-origin: x y;
+              !!注意：x 和 y 使用空格 隔开
+                     单位可以是：百分比（默认 50% 50%），
+                                像素，
+                                方位名称（top bottom left...）
+        3：缩放：scale
+            语法格式：
+              transform:scale(x,y);
+                !!注意：x 和 y 使用逗号隔开
+                       x 和 y 是倍数（scale(1.5,1.5)或scale(0.5,0.5)），x 为宽(x轴)，y 为高(y轴)
+                       等比缩放时，只需要一个参数 scale(1.5)或scale(0.5)
+                !!优势：可以设置缩放的中心点 transform-origin:x y; 默认元素中心
+                       不影响其他元素
+     -->
+
+    <!-- css3 动画 -->
+    <!-- 
+      动画 animation 可以通过设置多个节点来精确控制一个或一组动画
+          常用来实现复杂的动画效果
+          相比过渡效果，动画可以实现更多变化，更多控制，连续自动播放等效果
+      1：动画的基本使用：
+        1):先定义动画
+            在style中定义动画
+            @keyframes 动画名称 {
+              动画开始
+              0% {
+                width:100px;
+                transform:translate(0);
+              }
+              50% {
+                width:300px;
+                transform:translate(400px);
+              }
+              动画结束
+              100% {
+                width:200px;
+                transform:translate(100px)
+              }
+            }
+            0%和100%有名字，叫动画序列 可以用关键字 from 和 to 等价
+            0% 和 100% 之间可以插入任意 百分数，就可以改变任意多次状态
+        2):再调用（使用）动画
+            在 样式中调用动画
+            div {
+              width:100px;
+              height:100px;
+              background-color:red;
+              调用动画：
+                动画名称
+              animation-name:动画名称;
+                持续时间
+              animation-duration:2s;
+            }
+
+        3）：调用动画的属性有：
+            animation:所有动画的属性的简写，除了 animation-play-state 以外
+              animation:动画名称 持续时间 速度曲线 何时开始 播放次数 是否反方向 动画起始或结束状态;
+              不一定要写全，可以省略不是必须的属性。
+              animation 可以给一个元素设置多个动画，中间以逗号隔开
+                例如：animation: change 2s linear 0 infinite, move 2s ease 0 infinite;
+            animation-name:动画名称; 规定定义的动画的名称（必须的）
+            animation-duration:3s;  规定动画执行的持续时间（必须的）
+            animation-timing-function:; 规定动画的速度曲线，
+              默认 ease:变速 
+                  linear:匀速,
+                  ease-in:动画以低速开始，
+                  ease-out:动画以低速结束，
+                  ease-in-out:动画以低速开始和结束，
+                  steps():指定了每个动画序列的时间函数中的间隔数量（步长），
+                         即，这个动画的每个动画序列分几步做完
+            animation-delay:; 规定动画开始的时间，默认是 0
+            animation-iteration-count:;规定动画被播放的次数，默认是 1，还有 infinite
+            animation-direction:;规定动画是否在下一周期逆向播放，默认 normal,还有 alternate:逆向
+            animation-play-state:;规定动画是否正在运行 或 暂停，默认 running,还有 paused：暂停
+            animation-fill-mode:;规定动画结束后状态，默认 backwards回到原点, 还有 forwards 保持现状
+     -->
+
+    <!-- css3 3D转换 -->
+    <!-- 
+      现实3D有什么特点：
+        。近大远小
+        。物体后面遮挡不可见
+      网页3D能参考这些特点：
+        . 3D,三维坐标系
+            x 轴: 水平向右，越往右越大
+            y 轴：垂直向下，越往下越大
+            z 轴：垂直屏幕，越往外越大
+
+      3D主要的学习内容：3D位移 和 3D旋转 和 透视 和 3D呈现
+        1：3D位移
+            translate3d(x,y,z)
+            3D位移只是比2D位移多了一个方向，z轴
+            。translateX()
+            。translateY()
+            。translateZ() 注意，z轴一般只用 px 做单位 
+                                必须借助 透视perspective 才能看出效果
+                                perspective值不变，z轴 值越大，物体越大
+            。translate3d(x,y,z)
+              .也可以：transform:translateX(n) translateY(n) translateZ(n);
+        2：3D旋转
+            rotate3d(x,y,z)
+            3D旋转 可以让元素在三维空间内 沿 x轴 y轴 x轴 自定义轴 进行旋转，
+            。transform:rotateX(45deg) 沿 x轴 正方向旋转 45度
+            。transform:rotateY(45deg) 沿 y轴 正方向旋转 45度
+            。transform:rotateZ(45deg) 沿 z轴 正方向旋转 45度
+            。transform:rotate3d(x,y,z,deg) 沿着自定义轴旋转 deg为角度（了解即可）
+                .transform:rotate3d(1,0,0,45deg) 表示沿着 x轴 旋转 45度
+                .transform:rotate3d(1,1,0,45deg) 表示沿着 x轴 y轴 矢量旋转 45度 这里相当于是一个矩形的对角线
+        3：透视
+            perspective
+            。透视 要写在被观察对象的 祖级元素上(父级或祖级都可以)。
+                  即：写到拥有 translate3d(x,y,z) 属性的元素的祖级元素上
+            。想要实现 3D 效果，必须借助透视，相当于看3D电影的 3D眼镜
+            。单位是 px
+            。相当于是 眼睛到电脑屏幕的距离 z轴值不变，这个距离越大，物体越小
+        4：3D呈现
+            transform-style
+            。控制 子元素 是否开启三维立体环境
+              也就是 子元素有3d属性时，父元素再设置3d属性，那么子元素的3d属性呈现方式。
+              .transform-style:flat; (默认的)子元素 不开启3d立体空间，
+              .transform-style:preserve-3d; 子元素 开启3d立体空间
+            。代码写给父级元素，但影响的是 子级元素
+     -->
+     <!-- 
+       为了照顾老的浏览器版本，我们给每个浏览器都写上私有前缀，以提高浏览器兼容性
+        -moz-     firefox浏览器私有前缀
+        -ms-      ie浏览器私有前缀
+        -webkit-  safari,chrome浏览器私有前缀
+        -o-       Opera浏览器私有前缀
+          例如：
+              border-radius:10px;
+          最完整的写法是：把每个浏览器的私有前缀都写一遍，最后写一遍没有私有前缀的
+              -moz-border-radius:10px;
+              -ms-border-radius:10px;
+              -webkit-border-radius:10px;
+              -o-border-radius:10px;
+              border-radius:10px;
+      -->
+
+    <!-- 移动端特殊样式 -->
+    <!-- 
+      css3盒子模型
+        box-sizing:border-box;
+        -webkit-box-sizing:border-box;
+      移动端 点击时背景色高亮一下，比如 a 链接，这个要清除，设置为透明
+        -webkit-tap-highlight-transparent;
+      移动端浏览器默认的外观在ios上加上这个属性才能自定义按钮和输入框外观样式
+        -webkit-appearance:none;
+      禁用长按页面时的弹出菜单
+        img,a { -webkit-touch-callout:none;}
+     -->
+
+
+<!-- css3 过渡 transition -->
+<!-- 
+  css3过渡 transition 是元素从一个样式逐渐改变为另一种样式的效果
+    4个过渡属性：
+      1：transition-property  规定应该过渡的 CSS 属性名称
+                            （瞬间变化的属性不能设置过渡，比如 display）
+      2：transition-duration  规定过渡效果花费的时间，默认 0 单位 S
+      2：transition-timing-function  规定过渡效果的时间曲线
+            linear  匀速
+            ease    变速
+            ease-in 慢速开始
+            ease-out 慢速结束
+            ease-in-out 慢速开始和结束
+      4：transition-delay  规定过渡效果何时开始 默认 0
+    过渡效果简写：transition: css属性名称 花费时间  时间曲线 何时开始
+
+
+ -->
+
+
+
+      
